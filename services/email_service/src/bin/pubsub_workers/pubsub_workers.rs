@@ -1,10 +1,7 @@
 #![recursion_limit = "256"]
 use anyhow::Context;
-use auth_service_url::AuthServiceUrl;
-use connection_gateway_url::ConnectionGatewayUrl;
 use document_storage_service_client::DocumentStorageServiceClient;
-use document_storage_service_url::DocumentStorageServiceUrl;
-use email_api_client::GmailApiClientRepository;
+use email_api_client_outbound::GmailApiClientRepository;
 use email_service::composition::workers::CrmMetadataResolver;
 use email_service::config::Config;
 use email_service::outbound::email_api::{
@@ -14,12 +11,14 @@ use email_service::util::redis::RedisClient;
 use macro_entrypoint::{MacroEntrypoint, shutdown_signal};
 use macro_env::Environment;
 use macro_event_broker::{KafkaEventPublisher, MacroEventBrokerService};
+use macro_service_urls::{
+    AuthServiceUrl, ConnectionGatewayUrl, DocumentStorageServiceUrl, StaticFileServiceUrl,
+};
 use notification::domain::service::SqsNotificationIngress;
 use notification::outbound::queue::SqsQueue;
 use sqlx::PgPool;
 use sqlx::postgres::PgPoolOptions;
 use static_file_service_client::StaticFileServiceClient;
-use static_file_service_url::StaticFileServiceUrl;
 use std::sync::Arc;
 use std::time::Duration;
 use system_properties::{PgSystemPropertiesRepository, SystemPropertiesServiceImpl};
@@ -299,34 +298,35 @@ async fn main() -> anyhow::Result<()> {
         sqs_client.clone(),
         RateBudget::Live,
     );
-    let outlook_repository = email_api_client::OutlookApiClientRepository::with_gate(Arc::new(
-        email_service::outbound::email_api::RedisMicrosoftRequestGate::new(
-            redis_conn.clone(),
-            email_api_client::outbound::microsoft_gate::RequestBudget::Live,
-        ),
-    ))?;
+    let outlook_repository =
+        email_api_client_outbound::OutlookApiClientRepository::with_gate(Arc::new(
+            email_service::outbound::email_api::RedisMicrosoftRequestGate::new(
+                redis_conn.clone(),
+                email_api_client_outbound::microsoft_gate::RequestBudget::Live,
+            ),
+        ))?;
     let outlook_credentials = email::domain::mailbox::credentials::MailboxCredentials::new(
         email::outbound::mailbox_pg::PgMailboxSync::new(db.clone()),
         email_service::outbound::email_api::MicrosoftCredentialsClient(auth_service_client.clone()),
     );
-    let outlook_api = email_api_client::domain::service::mailbox::MailboxApiService::new(
+    let outlook_api = email_api_client_core::service::mailbox::MailboxApiService::new(
         outlook_repository.clone(),
         outlook_credentials.clone(),
         // Admission is applied to each actual Graph request by the injected gate.
-        email_api_client::domain::ports::AlwaysAllowRateLimiter,
+        email_api_client_core::ports::AlwaysAllowRateLimiter,
     );
     let mailbox_repository = email::outbound::mailbox_pg::PgMailboxSync::new(db.clone())
         .with_imports_paused(config.outlook_imports_paused);
     if config.outlook_sync_enabled {
-        let outlook_import_api = email_api_client::domain::service::mailbox::MailboxApiService::new(
-            email_api_client::OutlookApiClientRepository::with_gate(Arc::new(
+        let outlook_import_api = email_api_client_core::service::mailbox::MailboxApiService::new(
+            email_api_client_outbound::OutlookApiClientRepository::with_gate(Arc::new(
                 email_service::outbound::email_api::RedisMicrosoftRequestGate::new(
                     redis_conn.clone(),
-                    email_api_client::outbound::microsoft_gate::RequestBudget::Import,
+                    email_api_client_outbound::microsoft_gate::RequestBudget::Import,
                 ),
             ))?,
             outlook_credentials,
-            email_api_client::domain::ports::AlwaysAllowRateLimiter,
+            email_api_client_core::ports::AlwaysAllowRateLimiter,
         );
         // Newest-first imports and the live pass beside them follow
         // `enable-outlook-import-live-pass`; without a PostHog key they are off.
@@ -461,7 +461,7 @@ async fn main() -> anyhow::Result<()> {
             email::domain::mailbox::watches::MailboxWatchService::new(
                 mailbox_repository.clone(),
                 email_service::outbound::email_api::ProviderMailboxGateway(outlook_api.clone()),
-                email_service_url::EmailServiceUrl::new_for_environment(env)?.to_string(),
+                macro_service_urls::EmailServiceUrl::new_for_environment(env)?.to_string(),
             ),
             worker_cancellation_token.clone(),
         ));
