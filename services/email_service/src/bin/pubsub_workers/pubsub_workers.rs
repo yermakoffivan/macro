@@ -15,7 +15,7 @@ use macro_service_urls::{
     AuthServiceUrl, ConnectionGatewayUrl, DocumentStorageServiceUrl, StaticFileServiceUrl,
 };
 use notification::domain::service::SqsNotificationIngress;
-use notification::outbound::queue::SqsQueue;
+use notification_outbound::queue::SqsQueue;
 use sqlx::PgPool;
 use sqlx::postgres::PgPoolOptions;
 use static_file_service_client::StaticFileServiceClient;
