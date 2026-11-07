@@ -83,7 +83,7 @@ calls, gaps and failures, for finding out why a session was slow or wrong.
   `invoke_agent` spans.
 - No span names the eager tools, only their count and bytes
   (`macro.genai.prompt.tools.eager.*`). Names come from `EAGER_TOOLS`
-  (`crates/ai_tools/src/lib.rs`) and `EAGER_INTERNAL_MCP_TOOLS`
+  (`crates/ai/ai_tools/src/lib.rs`) and `EAGER_INTERNAL_MCP_TOOLS`
   (`crates/agent_inmem/src/rig_engine.rs`) as checked out, kept where the
   session shows the tool. Fewer names than the span count is normal (code
   mode's own tools are not in those lists); a list that can't be read is the

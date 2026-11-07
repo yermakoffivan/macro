@@ -34,7 +34,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 CACHE = pathlib.Path.home() / ".cache" / "agent-session-view"
 EXAMPLE = HERE / "asv_reconstruct.rs"
-EXAMPLE_PATH = "crates/ai_tools/examples/asv_reconstruct.rs"
+EXAMPLE_PATH = "crates/ai/ai_tools/examples/asv_reconstruct.rs"
 PROD_DEPLOY = "Deploy Production Release"
 NOT_STARTED = {"queued", "pending", "waiting", "requested"}
 # `select_documentation` records its bytes before closing the block.

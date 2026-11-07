@@ -2,7 +2,7 @@
 //! code of the checkout it is built in.
 //!
 //! `agent-session-view --reconstruct` copies this file to
-//! `crates/ai_tools/examples/` of a checkout at the commit that served a
+//! `crates/ai/ai_tools/examples/` of a checkout at the commit that served a
 //! session and runs it there, so every string comes from that commit's own
 //! code; nothing here re-implements it. The leading newlines the harness puts
 //! before the identity and integrations sections are the only glue copied,
