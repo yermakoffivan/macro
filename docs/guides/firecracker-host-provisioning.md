@@ -59,7 +59,7 @@ A host file next to the module sets what is particular to it, and is added to
     };
     clientCertificates = [ ./certs/control-plane-<env>.crt ];
     datadog.apiKeyFile = "/var/lib/macro/datadog-api-key";
-    # ROOT_DISK_GIB in crates/hosted_runtimes/src/domain/size.rs.
+    # ROOT_DISK_GIB in crates/agents/hosted_runtimes/src/domain/size.rs.
     storage.goldenRootDiskGib = 32;
     environment = "production";
   };
