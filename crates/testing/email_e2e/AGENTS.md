@@ -17,14 +17,14 @@ scenarios.
   production queues with their dead-letter queues, an in-memory S3 and CDN
   (`src/aws.rs`), stand-ins for the other Macro services that record what
   they were asked (`src/macro_services.rs`), and the two service processes.
-- `Stack::start_with(StackOptions { document_storage: true, .. })` also
+- `Stack::start_with(StackOptions { document_storage: true, ../.. })` also
   starts the real `document_storage_service` on the same database, Redis
   database, queues and providers: it serves the GraphQL API the web app
   sends mail through. It is a third large process, so only scenarios that
   need it ask for it. On such a stack the stand-in for document storage
   records what the email services ask and passes it on to this process, so
   attachments become real documents.
-- `StackOptions { search: true, .. }` adds the real search indexer
+- `StackOptions { search: true, ../.. }` adds the real search indexer
   (`search_processing_service`) on top of document storage: it follows the
   mail's Kafka events into OpenSearch, and document storage answers
   `POST /search` from it. The indexer's consumer group is one for every
@@ -32,12 +32,12 @@ scenarios.
   indexer misses nothing published while it joins, and each indexer goes on
   from where the last one stopped. Events of other scenarios in between
   name mail that is not in this scenario's database and are passed over.
-- `StackOptions { outlook_import_live_pass: true, .. }` turns on the Outlook
+- `StackOptions { outlook_import_live_pass: true, ../.. }` turns on the Outlook
   import live pass (`enable-outlook-import-live-pass`): the email services
   read the flag from the Macro services stand-in, which answers PostHog's
   `/flags/` with it on, and `Stack::start_with` returns once the workers'
   log shows they read it. Off by default, as in production.
-- `StackOptions { focus: true, .. }` adds the real `email_focus_worker`,
+- `StackOptions { focus: true, ../.. }` adds the real `email_focus_worker`,
   which classifies arriving mail for Focus from the mail's Kafka events, and
   stand-ins for the three things it asks outside the database
   (`src/focus.rs`): the model that answers the Focus questions, reached
@@ -137,7 +137,7 @@ async fn new_mail_arrives_through_push() -> Result<(), Report> {
   and `tests/crm.rs`, which seeds a team and its CRM rows in the database
   because the services that create them are not started.
 - The email tools an AI agent calls: `stack.email_tools()?.call(&user,
-  "GetThread", &json!({ .. }))` runs a tool in the test process on the
+  "GetThread", &json!({ ../.. }))` runs a tool in the test process on the
   scenario's database and queues, and the scenario's workers carry out what
   it stages. No model and no tool host is involved: a host's own wiring
   (which queues it configures) is not exercised. `SendEmail` defers to a
@@ -345,8 +345,8 @@ shared with the web app's suite) and backend entry points second.
 ## Scope
 
 - Owns: the harness and the email and calendar scenarios.
-- Not here: the fakes of Google and Microsoft → `crates/gmail_emulator`,
-  `crates/outlook_emulator`. Tests of one crate's logic → that crate.
+- Not here: the fakes of Google and Microsoft → `crates/testing/gmail_emulator`,
+  `crates/testing/outlook_emulator`. Tests of one crate's logic → that crate.
 - The web app against this stack: `apps/web/tests/email-e2e` (its README).
   `src/stack_server.rs` and the `email_e2e_stacks` binary serve stacks over
   HTTP for it, one per browser test; add a route there when a browser test
@@ -460,5 +460,5 @@ shared with the web app's suite) and backend entry points second.
 
 ## Related
 
-- Docs: `crates/gmail_emulator/AGENTS.md`, `crates/outlook_emulator/AGENTS.md`,
+- Docs: `crates/testing/gmail_emulator/AGENTS.md`, `crates/testing/outlook_emulator/AGENTS.md`,
   `services/email_service/AGENTS.md`

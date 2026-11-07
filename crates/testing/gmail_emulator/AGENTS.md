@@ -104,8 +104,8 @@ a local stack, without Google accounts.
   authorization and token endpoints and `<base>/v1/userinfo`. A local stack
   does all of this by itself.
 - Calendar in a test: `GoogleCalendarClient::new_with_url(client,
-  emulator.calendar_url())` with `emulator.access_token(..)`; seed events as
-  `SeedCalendar { events, .. }` or add them with `emulator.add_event`.
+  emulator.calendar_url())` with `emulator.access_token(../..)`; seed events as
+  `SeedCalendar { events, ../.. }` or add them with `emulator.add_event`.
 - Point a local `calendar_service` at it:
   `OVERRIDE_GOOGLE_CALENDAR_API_URL=<base>/calendar/v3`,
   `OVERRIDE_AUTH_SERVICE_URL=<base>/_emulator/authentication-service`, and
