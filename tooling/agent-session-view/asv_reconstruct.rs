@@ -2,7 +2,7 @@
 //! code of the checkout it is built in.
 //!
 //! `agent-session-view --reconstruct` copies this file to
-//! `crates/ai/ai_tools/examples/` of a checkout at the commit that served a
+//! `crates/ai/agent_tools/examples/` of a checkout at the commit that served a
 //! session and runs it there, so every string comes from that commit's own
 //! code; nothing here re-implements it. The leading newlines the harness puts
 //! before the identity and integrations sections are the only glue copied,
@@ -113,7 +113,7 @@ fn main() {
         docs.push(runtime.block_on(documentation(request, &user)));
     }
 
-    let tools = ai_tools::tools_for_agent_code_mode();
+    let tools = agent_tools::tools_for_agent_code_mode();
     let identities: Vec<String> = input["identities"]
         .as_array()
         .into_iter()

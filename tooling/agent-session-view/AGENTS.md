@@ -51,7 +51,7 @@ calls, gaps and failures, for finding out why a session was slow or wrong.
   `ecs describe-task-definition`, and a Rust build: the first run at a commit
   checks it out under `~/.cache/agent-session-view/src/<sha>`, builds that
   commit's `code-mode-assets` Nix package (the generated SDK docs; a
-  checkout without a bun install can't make them) and then `ai_tools`,
+  checkout without a bun install can't make them) and then `agent_tools`,
   which takes long; later runs read
   `~/.cache/agent-session-view/reconstruct/<sha>/`. Set `ASV_BUILD_WRAPPER`
   to prefix the build (a build-slot queue, `nice`).
@@ -83,7 +83,7 @@ calls, gaps and failures, for finding out why a session was slow or wrong.
   `invoke_agent` spans.
 - No span names the eager tools, only their count and bytes
   (`macro.genai.prompt.tools.eager.*`). Names come from `EAGER_TOOLS`
-  (`crates/ai/ai_tools/src/lib.rs`) and `EAGER_INTERNAL_MCP_TOOLS`
+  (`crates/ai/agent_tools/src/lib.rs`) and `EAGER_INTERNAL_MCP_TOOLS`
   (`crates/agents/agent_inmem/src/rig_engine.rs`) as checked out, kept where the
   session shows the tool. Fewer names than the span count is normal (code
   mode's own tools are not in those lists); a list that can't be read is the

@@ -91,7 +91,7 @@ SECTION = re.compile(r"^\[[^\]]*\]", re.M)
 
 def rename_manifest(text):
     """Dependency keys only inside dependency tables; a feature may share
-    the crate's name (`ai_tools = ["dep:..."]`). An optional dependency is
+    the crate's name (`agent_tools = ["dep:..."]`). An optional dependency is
     also an implicit feature (`convert = ["old"]`) unless the manifest
     defines a feature with that name or names the dependency as `dep:old`."""
     optional = re.search(r"^\s*" + O + r"\s*=\s*\{[^}\n]*optional\s*=\s*true", text, re.M)

@@ -1,5 +1,5 @@
 crates/agent crates/ai/agent
-crates/ai_tools crates/ai/ai_tools
+crates/agent_tools crates/ai/agent_tools
 crates/ai_toolset crates/ai/ai_toolset
 crates/attachment crates/ai/attachment
 crates/cognition crates/ai/cognition

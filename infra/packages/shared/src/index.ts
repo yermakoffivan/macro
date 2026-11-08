@@ -66,7 +66,7 @@ export {
   getAiToolsInfra,
   getAiToolsServiceRoleArns,
   type AiToolsInfra,
-} from './ai_tools';
+} from './agent_tools';
 export { getKafkaClusterPolicy } from './kafka_cluster_policy';
 export { getGatewayAlb, type GatewayAlb } from './gateway';
 export { GATEWAY_PRIORITIES, GatewayService } from './gateway_priorities';

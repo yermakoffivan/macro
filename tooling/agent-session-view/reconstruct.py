@@ -3,7 +3,7 @@
 Prompt text is in no log or span, so it is rebuilt from source: the commit
 that served the turn is found, checked out (detached, under the cache
 directory), and `asv_reconstruct.rs` is built there as an example of
-`ai_tools`, so every string comes from that commit's own rendering code. Each
+`agent_tools`, so every string comes from that commit's own rendering code. Each
 part is then checked against the span: the bytes and the SHA-256 prefix the
 harness records per prompt section. A part that matches is "verified"; one
 that does not is a "mismatch" and is shown as one; one with nothing to check
@@ -34,7 +34,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 CACHE = pathlib.Path.home() / ".cache" / "agent-session-view"
 EXAMPLE = HERE / "asv_reconstruct.rs"
-EXAMPLE_PATH = "crates/ai/ai_tools/examples/asv_reconstruct.rs"
+EXAMPLE_PATH = "crates/ai/agent_tools/examples/asv_reconstruct.rs"
 PROD_DEPLOY = "Deploy Production Release"
 NOT_STARTED = {"queued", "pending", "waiting", "requested"}
 # `select_documentation` records its bytes before closing the block.
@@ -240,7 +240,7 @@ def render(sha, request):
         *wrapper, "env", "SQLX_OFFLINE=true", f"CARGO_TARGET_DIR={CACHE / 'target' / sha}",
         f"CODE_MODE_ASSETS_DIR={assets.stdout.strip().splitlines()[-1]}",
         "nix", "develop", str(path), "-c",
-        "cargo", "run", "-q", "-p", "ai_tools", "--example", "asv_reconstruct",
+        "cargo", "run", "-q", "-p", "agent_tools", "--example", "asv_reconstruct",
     ]
     result = subprocess.run(command, input=payload, capture_output=True, text=True, cwd=path)
     if result.returncode != 0:
