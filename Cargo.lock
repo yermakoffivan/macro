@@ -13733,6 +13733,7 @@ dependencies = [
  "futures",
  "macro_user_id",
  "macro_uuid",
+ "message_id",
  "messages",
  "model",
  "model_entity",
@@ -14392,6 +14393,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "message_id"
+version = "0.1.0"
+dependencies = [
+ "id_newtype",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "utoipa",
+ "uuid",
+]
+
+[[package]]
 name = "message_parent"
 version = "0.1.0"
 dependencies = [
@@ -14429,6 +14442,7 @@ dependencies = [
  "macro_user_id",
  "macro_uuid",
  "mention_utils",
+ "message_id",
  "message_parent",
  "mockall",
  "model",
