@@ -4354,8 +4354,6 @@ version = "0.1.0"
 dependencies = [
  "agent_correlation",
  "anyhow",
- "app_service_url",
- "auth_service_url",
  "authentication_service_client",
  "aws-sdk-secretsmanager",
  "aws-sdk-sqs",
@@ -4364,8 +4362,6 @@ dependencies = [
  "calendar_scheduling",
  "chrono",
  "connection_gateway_client",
- "connection_gateway_url",
- "document_storage_service_url",
  "email_api_client_core",
  "email_api_client_outbound",
  "email_db_client",
