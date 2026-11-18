@@ -1,5 +1,5 @@
 import { queryClient } from '@queries/client';
-import { useMutationState } from '@tanstack/solid-query';
+import { useMutationState } from '@queries/mutation-state';
 import { createMemo } from 'solid-js';
 import type { EntityData } from '../../entity/types/entity';
 import type { EntityAppearance } from '../core/appearance';
