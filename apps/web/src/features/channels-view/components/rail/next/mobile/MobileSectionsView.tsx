@@ -13,7 +13,7 @@ import { useChannelLabelsQuery } from '@queries/channel-labels/channel-labels';
 import { useFavoritesData } from '@queries/favorites/favorites';
 import { queryReadyGate } from '@queries/gate';
 import { useCurrentTeamQuery } from '@queries/team/teams';
-import { createMemo, createSignal, Show } from 'solid-js';
+import { createMemo, createSignal, getOwner, Show } from 'solid-js';
 import { useChannelsView } from '../../../../channels-view-context';
 import type { ChannelsDataSource, ChannelsSources } from '../../../../queries';
 import { deduplicateChannels } from '../../../../queries';
@@ -151,7 +151,7 @@ export function MobileSectionsView(props: {
   );
   const channelNotifications = createChannelNotificationSettings({
     labels,
-    channelType: (channelId) => channelsById().get(channelId)?.channelType,
+    resolveConflictChannels: true,
     favoriteChannelIds: () =>
       new Set(
         (favorites()?.favorites ?? [])
@@ -159,10 +159,10 @@ export function MobileSectionsView(props: {
           .map((favorite) => favorite.entityId)
       ),
   });
-  const sectionNotifications = sectionNotificationMenus(
-    channelNotifications,
-    (channelId) => channelsById().get(channelId)?.name
-  );
+  // Sheets opened from the section's options sheet stack under its owner.
+  const sectionNotifications = sectionNotificationMenus(channelNotifications, {
+    dialogOwner: getOwner(),
+  });
   const actions = useMobileSectionActions({
     enabled: () => sectionsEnabled() && channelTags().enabled,
     labels,
